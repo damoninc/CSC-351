@@ -1,1 +1,1 @@
-#Homework and in-class files for CSC-351
+# Homework and in-class files for CSC-351
