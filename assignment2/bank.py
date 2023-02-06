@@ -151,7 +151,7 @@ def withdraw(account_num: int, amount: float):
     for account in acct_list:
         if account.account_num == account_num:
             found = True
-            if amount < account.balance:
+            if amount <= account.balance:
                 account.balance -= amount
             else:
                 raise ValueError("Cannot withdrawy more than account balance")
