@@ -73,16 +73,10 @@ def create(owner_name: str, balance: float):
             if account_num == acct.account_num:
                 raise KeyError
         new_account = Account(account_num=account_num, owner_name=owner_name, balance=balance)
-        with open('accounts.csv') as acct_db:
-
+        acct_list.append(new_account)
 
     except KeyError:
         create(owner_name, balance)
-        
-
-
-    
-
 
 
 def deposit(account_num: int, amount: float):
@@ -103,8 +97,27 @@ def deposit(account_num: int, amount: float):
     :return: the function returns nothing
     """
 
-    raise NotImplementedError  # remove this line when you work on this function
+    if not isinstance(account_num, int):
+        raise TypeError("Account Number must be of type int")
 
+    if not isinstance(amount, float):
+        raise TypeError("Amount must be of type float")
+    
+    if account_num < 100000:
+        raise ValueError("Account num must be 6 digits")
+
+    if amount < 0:
+        raise ValueError("Amount deposited cannot be less than 0")
+
+    found = False
+    for account in acct_list:
+        if account_num == account.account_num:
+            account.balance += amount
+            found = True
+
+    if found == False:
+        raise ValueError("Account number not found!")
+    
 
 def withdraw(account_num: int, amount: float):
     """
@@ -125,11 +138,31 @@ def withdraw(account_num: int, amount: float):
     :return: the function returns nothing
     """
 
-    raise NotImplementedError  # remove this line when you work on this function
+    if not isinstance(account_num, int):
+        raise TypeError("Account Number must be of type int")
+    
+    if not isinstance(amount, float):
+        raise TypeError("Amount must be of type float")
+    
+    if account_num < 100000:
+        raise ValueError("Account num must be 6 digits")
+
+    found = False
+    for account in acct_list:
+        if account.account_num == account_num:
+            found = True
+            if amount < account.balance:
+                account.balance -= amount
+            else:
+                raise ValueError("Cannot withdrawy more than account balance")
+    
+    if found == False:
+        raise ValueError("Account num not found!")
+    
+print(acct_list[0])
+deposit(796505, 123.45)
+print(acct_list[0])
+withdraw(123456, 4000.00)
+print(acct_list[0])
 
 
-# print(acct_list[0])
-# deposit(796505, 123.45)
-# print(acct_list[0])
-
-create()
