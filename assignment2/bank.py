@@ -35,7 +35,6 @@ acct_list = [Account(*x.strip().split(',')) for x in open('accounts.csv').readli
 #       - maintaining the postconditions of each function
 ########################
 import random
-import math
 import re
 # Name: Damon Incorvaia
 # CSC 350-001, Spring 2023
@@ -185,7 +184,7 @@ def withdraw(account_num: int, amount: float):
         raise ValueError("Account num not found!")
 
 
-create("John Smith34", 5000.00)
+create("John Smith", 5000.00)
 print(acct_list[-1])
 deposit(acct_list[-1].account_num, 123.45)
 print(acct_list[-1])
