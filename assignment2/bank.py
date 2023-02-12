@@ -35,7 +35,8 @@ acct_list = [Account(*x.strip().split(',')) for x in open('accounts.csv').readli
 #       - maintaining the postconditions of each function
 ########################
 import random
-
+import math
+import re
 # Name: Damon Incorvaia
 # CSC 350-001, Spring 2023
 # Assignment 1 - input validation practice
@@ -60,11 +61,24 @@ def create(owner_name: str, balance: float):
     """
     # Input Validation
 
+    pattern = re.compile('^[A-Za-z]+$')
+    if not re.match(pattern, owner_name.replace(' ', '')):
+        raise ValueError("Name must only contain letters.")
+
     if not isinstance(owner_name, str):
-        raise TypeError("Account Owner Name must be a type String")
-        
+        raise TypeError("Account Owner Name must be a type String.")
+         
     if not isinstance(balance, float):
-        raise TypeError("Account balance must be of type Float")
+        raise TypeError("Account balance must be of type Float.")
+
+    if len(owner_name) > 64:
+        raise ValueError("Account Owner Name must not exceed 64 characters.")
+    
+    if len(owner_name) == 0:
+        raise ValueError("Account Owner Name must not be null.")
+
+    if balance < 0:
+        raise ValueError("Balance must not be less than 0.")
     
     # Start of Account creation
     try:
@@ -97,6 +111,8 @@ def deposit(account_num: int, amount: float):
     :return: the function returns nothing
     """
 
+    # Input Validation
+
     if not isinstance(account_num, int):
         raise TypeError("Account Number must be of type int")
 
@@ -109,10 +125,12 @@ def deposit(account_num: int, amount: float):
     if amount < 0:
         raise ValueError("Amount deposited cannot be less than 0")
 
+    # Start of deposit 
+
     found = False
     for account in acct_list:
         if account_num == account.account_num:
-            account.balance += amount
+            account.balance = round(account.balance + amount, 2)
             found = True
 
     if found == False:
@@ -138,6 +156,8 @@ def withdraw(account_num: int, amount: float):
     :return: the function returns nothing
     """
 
+    # Input Validation
+
     if not isinstance(account_num, int):
         raise TypeError("Account Number must be of type int")
     
@@ -147,22 +167,30 @@ def withdraw(account_num: int, amount: float):
     if account_num < 100000:
         raise ValueError("Account num must be 6 digits")
 
+    if amount < 0:
+        raise ValueError("Cannot withdraw less than 0 dollars.")
+
+    # Start of Withdraw
+
     found = False
     for account in acct_list:
         if account.account_num == account_num:
             found = True
             if amount <= account.balance:
-                account.balance -= amount
+                account.balance = round(account.balance - amount, 2)
             else:
                 raise ValueError("Cannot withdraw more than account balance")
     
     if found == False:
         raise ValueError("Account num not found!")
-    
-print(acct_list[0])
-deposit(796505, 123.45)
-print(acct_list[0])
-withdraw(123456, 4000.00)
-print(acct_list[0])
+
+
+create("John Smith34", 5000.00)
+print(acct_list[-1])
+deposit(acct_list[-1].account_num, 123.45)
+print(acct_list[-1])
+withdraw(acct_list[-1].account_num, 4000.00)
+print(acct_list[-1])
+deposit(acct_list[-1].account_num, 2.00)
 
 
